@@ -12,5 +12,13 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+        '^/yindex.php': {
+            target: 'https://www.klerk.ru',
+            changeOrigin: true
+        }
+    }
   }
 })
