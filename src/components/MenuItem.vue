@@ -13,7 +13,7 @@
         </div>
 
         <ul class="list" v-if="item.children && item.children.length > 0">
-            <MenuItem v-for="child in item.children" :item="child" @check="checkEventHandler($event)"/> 
+            <MenuItem v-for="child, index in item.children" :item="child" @check="checkEventHandler($event, index)"/> 
         </ul>
     </li>
 </template>
@@ -30,7 +30,7 @@
                 checkbox: false,
                 childrenCount: 0,
                 totalCount: 0,
-                checkedSumm: 0
+                checkedInfo: {}
             }
         },
         mounted() {
@@ -65,34 +65,30 @@
             },
 
             check() {
-                let count = 0;
-
                 if (this.checkbox) {
-                    count = this.totalCount
+                    this.$emit('check', this.totalCount)
                 } else {
-                    count = this.totalCount * -1
+                    this.$emit('check', 0)
                 }
-
-                this.checkedSumm += count
-                
-                if (this.checkbox) { 
-                    this.$emit('check', count)
-                } else if (this.checkedSumm > 0) {
-                    this.$emit('check', this.checkedSumm)
-                } else {
-                    this.$emit('check', count)
-                }
-                
             },
 
-            checkEventHandler(count) {
-                this.checkedSumm += count
-                if (this.checkbox) { 
+            checkEventHandler(event, index) {
+                if (typeof this.checkedInfo[index] === 'undefined') {
+                    this.checkedInfo[index] = 0
+                }
+                
+                this.checkedInfo[index] = event
+
+                if (this.checkbox) {
                     this.$emit('check', this.totalCount)
-                } else if (count < 0) {
-                    this.$emit('check', count)
                 } else {
-                    this.$emit('check', this.checkedSumm)
+                    let summ = 0
+
+                    for (const item in this.checkedInfo) {
+                        summ += this.checkedInfo[item]
+                    }
+                    
+                    this.$emit('check', summ)
                 }
             }
         }

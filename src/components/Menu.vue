@@ -70,7 +70,6 @@ import Loading from './Loading.vue'
                 this.expanded = !this.expanded
             },
             countCheckedSumm(event, index) {
-
                 if (!this.checkedInfo[index]) {
                     this.checkedInfo[index] = 0
                 }
