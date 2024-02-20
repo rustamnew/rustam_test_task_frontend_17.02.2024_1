@@ -1,8 +1,9 @@
 <template>
     <li class="menu-item" :class="expanded ? 'expanded' : ''">
-        <button v-if="item.children && item.children.length > 0" class="expand" @click="expandClick()">{{ expanded ? '-' : '+' }}</button>
         
         <div class="title">
+            <button v-if="item.children && item.children.length > 0" class="expand" @click="expandClick()">{{ expanded ? '-' : '+' }}</button>
+            
             <a class="link" :href="`https://www.klerk.ru${item.url}`" target="_blank">{{item.title}}</a>
 
             <input type="checkbox" v-model="checkbox" @change="check()">
@@ -86,9 +87,10 @@
 
             checkEventHandler(count) {
                 this.checkedSumm += count
-
                 if (this.checkbox) { 
                     this.$emit('check', this.totalCount)
+                } else if (count < 0) {
+                    this.$emit('check', count)
                 } else {
                     this.$emit('check', this.checkedSumm)
                 }
@@ -122,6 +124,8 @@
         justify-content: center;
         background: none;
         cursor: pointer;
+        align-self: flex-start;
+        margin-top: 2px;
     }
     .list {
         display: none;
